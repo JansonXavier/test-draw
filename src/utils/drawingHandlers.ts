@@ -1,66 +1,61 @@
-export const handleBrushDraw = (ctxRef: any, drawing: any) => {
+const handleBrushDraw = (ctx: any, drawing: any) => {
   const { start, points } = drawing;
 
-  ctxRef.current.beginPath();
-  ctxRef.current.moveTo(start[0], start[1]);
+  ctx.beginPath();
+  ctx.moveTo(start[0], start[1]);
 
   for (let i = 0; i < points.length - 2; i += 2) {
     const first = points[i];
     const second = points[i + 1];
-    ctxRef.current?.quadraticCurveTo(first[0], first[1], second[0], second[1]);
+    ctx?.quadraticCurveTo(first[0], first[1], second[0], second[1]);
   }
 };
 
-export const handleLineDraw = (ctxRef: any, drawing: any) => {
+const handleLineDraw = (ctx: any, drawing: any) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
 
-  ctxRef.current.beginPath();
-  ctxRef.current.moveTo(start[0], start[1]);
-  ctxRef.current.lineTo(point[0], point[1]);
+  ctx.beginPath();
+  ctx.moveTo(start[0], start[1]);
+  ctx.lineTo(point[0], point[1]);
 };
 
-export const handleArrowDraw = (ctxRef: any, drawing: any) => {
+const handleArrowDraw = (ctx: any, drawing: any) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
 
-  ctxRef.current.beginPath();
+  ctx.beginPath();
 
   var dx = point[0] - start[0];
   var dy = point[1] - start[1];
-  var headlen = Math.sqrt(dx ** 2 + dy ** 2) * 0.1;
+  var headlen = Math.sqrt(dx ** 2 + dy ** 2) * 0.2;
   var angle = Math.atan2(dy, dx);
-  ctxRef.current.moveTo(start[0], start[1]);
-  ctxRef.current.lineTo(point[0], point[1]);
-  ctxRef.current.lineTo(
+  ctx.moveTo(start[0], start[1]);
+  ctx.lineTo(point[0], point[1]);
+  ctx.lineTo(
     point[0] - headlen * Math.cos(angle - Math.PI / 6),
     point[1] - headlen * Math.sin(angle - Math.PI / 6)
   );
-  ctxRef.current.moveTo(point[0], point[1]);
-  ctxRef.current.lineTo(
+  ctx.moveTo(point[0], point[1]);
+  ctx.lineTo(
     point[0] - headlen * Math.cos(angle + Math.PI / 6),
     point[1] - headlen * Math.sin(angle + Math.PI / 6)
   );
 };
 
-export const handleRectDraw = (ctxRef: any, drawing: any) => {
+const handleRectDraw = (ctx: any, drawing: any) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
 
-  ctxRef.current.beginPath();
-  ctxRef.current.rect(
-    start[0],
-    start[1],
-    point[0] - start[0],
-    point[1] - start[1]
-  );
-  ctxRef.current.stroke();
+  ctx.beginPath();
+  ctx.rect(start[0], start[1], point[0] - start[0], point[1] - start[1]);
+  ctx.stroke();
 };
 
-export const handleCircleDraw = (ctxRef: any, drawing: any) => {
+const handleCircleDraw = (ctx: any, drawing: any) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
@@ -68,10 +63,8 @@ export const handleCircleDraw = (ctxRef: any, drawing: any) => {
   const dx = point[0] - start[0];
   const dy = point[1] - start[1];
 
-  console.log(dx, dy);
-
-  ctxRef.current.beginPath();
-  ctxRef.current.ellipse(
+  ctx.beginPath();
+  ctx.ellipse(
     start[0] + dx / 2,
     start[1] + dy / 2,
     Math.abs(dx / 2),
@@ -81,3 +74,30 @@ export const handleCircleDraw = (ctxRef: any, drawing: any) => {
     2 * Math.PI
   );
 };
+
+const drawingHandler = (drawing: any, ctx: CanvasRenderingContext2D) => {
+  switch (drawing.type) {
+    case "brush":
+      handleBrushDraw(ctx, drawing);
+      break;
+    case "line":
+      handleLineDraw(ctx, drawing);
+      break;
+    case "arrow":
+      handleArrowDraw(ctx, drawing);
+      break;
+    case "rect":
+      handleRectDraw(ctx, drawing);
+      break;
+    case "circle":
+      handleCircleDraw(ctx, drawing);
+      break;
+
+    default:
+      console.error("Error: Unhandled drawing type:", drawing.type);
+  }
+
+  ctx?.stroke();
+};
+
+export default drawingHandler;

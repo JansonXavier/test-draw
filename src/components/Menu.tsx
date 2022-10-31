@@ -1,19 +1,18 @@
-import { Dispatch, FC, SetStateAction } from "react";
-
-const options = ["brush", "line", "arrow", "rect", "circle"];
+import { FC, MutableRefObject } from "react";
+import { modeOptions, ModeType } from "../utils/constants";
 
 type MenuProps = {
-  mode: any;
+  mode: MutableRefObject<ModeType>;
 };
 
 const Menu: FC<MenuProps> = ({ mode }) => {
-  const handleClick = (option: string) => {
+  const handleClick = (option: ModeType) => {
     mode.current = option;
   };
 
   return (
     <div>
-      {options.map((option) => (
+      {modeOptions.map((option) => (
         <button key={option} onClick={() => handleClick(option)}>
           {option}
         </button>
