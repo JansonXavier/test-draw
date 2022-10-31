@@ -1,48 +1,59 @@
-import { useState, FC, MutableRefObject, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  FC,
+  MouseEvent,
+  MutableRefObject,
+} from "react";
 import drawingHandler from "../utils/drawingHandlers";
 import mouseMoveHandler from "../utils/mouseMoveHandlers";
-import { Drawings } from "../utils/constants";
+import { Drawings, ModeType } from "../utils/constants";
 
 type CanvasProps = {
-  mode: any;
-  canvasRef: MutableRefObject<HTMLCanvasElement | null>;
-  ctxRef: MutableRefObject<CanvasRenderingContext2D | null>;
+  modeRef: MutableRefObject<ModeType>;
 };
 
-const Canvas: FC<CanvasProps> = ({ mode, canvasRef, ctxRef }) => {
+const Canvas: FC<CanvasProps> = ({ modeRef }) => {
   const [drawings, setDrawings] = useState<Drawings>([]);
-  const isDrawing = useRef(false);
+  const isDrawingRef = useRef(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+
+  useEffect(() => {
+    ctxRef.current = canvasRef?.current?.getContext("2d") || null;
+  }, []);
 
   useEffect(() => {
     if (!ctxRef.current) return;
 
-    ctxRef.current?.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    ctxRef.current.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     for (const drawing of drawings) {
       drawingHandler(drawing, ctxRef.current);
     }
-  }, [drawings, ctxRef, mode]);
+  }, [drawings]);
 
   const handleMouseUp = () => {
-    isDrawing.current = false;
+    isDrawingRef.current = false;
+    console.log(drawings);
   };
 
-  const handleMouseDown = (e: any) => {
+  const handleMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
     const { pageX, pageY } = e;
 
-    isDrawing.current = true;
-    setDrawings((prev: any) => [
+    isDrawingRef.current = true;
+    setDrawings((prev: Drawings) => [
       ...prev,
-      { type: mode.current, start: [pageX, pageY], points: [] },
+      { type: modeRef.current, start: [pageX, pageY], points: [] },
     ]);
   };
 
-  const handleMouseMove = (e: any) => {
-    if (!isDrawing.current) return;
+  const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawingRef.current) return;
 
     const { pageX, pageY } = e;
-
-    mouseMoveHandler(mode.current, setDrawings, pageX, pageY);
+    mouseMoveHandler(modeRef.current, setDrawings, pageX, pageY);
   };
 
   return (

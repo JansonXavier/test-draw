@@ -2,12 +2,12 @@ import { FC, MutableRefObject } from "react";
 import { modeOptions, ModeType } from "../utils/constants";
 
 type MenuProps = {
-  mode: MutableRefObject<ModeType>;
+  modeRef: MutableRefObject<ModeType>;
 };
 
-const Menu: FC<MenuProps> = ({ mode }) => {
+const Menu: FC<MenuProps> = ({ modeRef }) => {
   const handleClick = (option: ModeType) => {
-    mode.current = option;
+    modeRef.current = option;
   };
 
   return (

@@ -1,7 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 import { Drawings, ModeType } from "./constants";
 
-const handleBrushMove = (setDrawings: any, x: number, y: number) => {
+const handleBrushMove = (
+  setDrawings: Dispatch<SetStateAction<Drawings>>,
+  x: number,
+  y: number
+) => {
   setDrawings((prev: any) => {
     const newState = [...prev];
     const curDrawing = newState[newState.length - 1];
@@ -10,34 +14,11 @@ const handleBrushMove = (setDrawings: any, x: number, y: number) => {
   });
 };
 
-const handleLineMove = (setDrawings: any, x: number, y: number) => {
-  setDrawings((prev: any) => {
-    const newState = [...prev];
-    const curDrawing = newState[newState.length - 1];
-    curDrawing.points = [[x, y]];
-    return newState;
-  });
-};
-
-const handleArrowMove = (setDrawings: any, x: number, y: number) => {
-  setDrawings((prev: any) => {
-    const newState = [...prev];
-    const curDrawing = newState[newState.length - 1];
-    curDrawing.points = [[x, y]];
-    return newState;
-  });
-};
-
-const handleRectMove = (setDrawings: any, x: number, y: number) => {
-  setDrawings((prev: any) => {
-    const newState = [...prev];
-    const curDrawing = newState[newState.length - 1];
-    curDrawing.points = [[x, y]];
-    return newState;
-  });
-};
-
-const handleCircleMove = (setDrawings: any, x: number, y: number) => {
+const handleOtherMove = (
+  setDrawings: Dispatch<SetStateAction<Drawings>>,
+  x: number,
+  y: number
+) => {
   setDrawings((prev: any) => {
     const newState = [...prev];
     const curDrawing = newState[newState.length - 1];
@@ -57,16 +38,10 @@ const mouseMoveHandler = (
       handleBrushMove(setDrawings, x, y);
       break;
     case "line":
-      handleLineMove(setDrawings, x, y);
-      break;
     case "arrow":
-      handleArrowMove(setDrawings, x, y);
-      break;
     case "rect":
-      handleRectMove(setDrawings, x, y);
-      break;
     case "circle":
-      handleCircleMove(setDrawings, x, y);
+      handleOtherMove(setDrawings, x, y);
       break;
 
     default:

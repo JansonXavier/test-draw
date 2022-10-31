@@ -1,4 +1,6 @@
-const handleBrushDraw = (ctx: any, drawing: any) => {
+import { Drawing } from "./constants";
+
+const handleBrushDraw = (ctx: CanvasRenderingContext2D, drawing: Drawing) => {
   const { start, points } = drawing;
 
   ctx.beginPath();
@@ -11,7 +13,7 @@ const handleBrushDraw = (ctx: any, drawing: any) => {
   }
 };
 
-const handleLineDraw = (ctx: any, drawing: any) => {
+const handleLineDraw = (ctx: CanvasRenderingContext2D, drawing: Drawing) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
@@ -21,7 +23,7 @@ const handleLineDraw = (ctx: any, drawing: any) => {
   ctx.lineTo(point[0], point[1]);
 };
 
-const handleArrowDraw = (ctx: any, drawing: any) => {
+const handleArrowDraw = (ctx: CanvasRenderingContext2D, drawing: Drawing) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
@@ -45,7 +47,7 @@ const handleArrowDraw = (ctx: any, drawing: any) => {
   );
 };
 
-const handleRectDraw = (ctx: any, drawing: any) => {
+const handleRectDraw = (ctx: CanvasRenderingContext2D, drawing: Drawing) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
@@ -55,7 +57,7 @@ const handleRectDraw = (ctx: any, drawing: any) => {
   ctx.stroke();
 };
 
-const handleCircleDraw = (ctx: any, drawing: any) => {
+const handleCircleDraw = (ctx: CanvasRenderingContext2D, drawing: Drawing) => {
   const { start, points } = drawing;
   const point = points[0];
   if (!point) return;
@@ -75,7 +77,7 @@ const handleCircleDraw = (ctx: any, drawing: any) => {
   );
 };
 
-const drawingHandler = (drawing: any, ctx: CanvasRenderingContext2D) => {
+const drawingHandler = (drawing: Drawing, ctx: CanvasRenderingContext2D) => {
   switch (drawing.type) {
     case "brush":
       handleBrushDraw(ctx, drawing);

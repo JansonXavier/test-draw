@@ -1,3 +1,4 @@
+// Mode
 export type ModeType = "brush" | "line" | "arrow" | "rect" | "circle";
 export const modeOptions: ModeType[] = [
   "brush",
@@ -7,6 +8,7 @@ export const modeOptions: ModeType[] = [
   "circle",
 ];
 
+// Drawings
 export type Point = number[];
 export type Drawing = {
   type: string;
